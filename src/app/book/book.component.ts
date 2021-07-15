@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-book',
@@ -24,8 +25,9 @@ export class BookComponent implements OnInit {
   constructor(
     public readonly list: ListService,
     private bookService: BookService,
-    private fb: FormBuilder
-  ) {}
+    private fb: FormBuilder,
+    private confirmation: ConfirmationService // inject the ConfirmationService
+  ) { }
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);
@@ -76,6 +78,15 @@ export class BookComponent implements OnInit {
       this.isModalOpen = false;
       this.form.reset();
       this.list.get();
+    });
+  }
+
+  // Add a delete method
+  delete(id: string) {
+    this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
+      if (status === Confirmation.Status.confirm) {
+        this.bookService.delete(id).subscribe(() => this.list.get());
+      }
     });
   }
 }

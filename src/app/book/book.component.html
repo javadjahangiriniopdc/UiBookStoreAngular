@@ -38,6 +38,9 @@
               <button ngbDropdownItem (click)="editBook(row.id)">
                 {{ '::Edit' | abpLocalization }}
               </button>
+              <button ngbDropdownItem (click)="delete(row.id)">
+                {{ '::Delete' | abpLocalization }}
+              </button>
             </div>
           </div>
         </ng-template>
@@ -64,7 +67,7 @@
 <!-- Add the modal here -->
 <abp-modal [(visible)]="isModalOpen">
   <ng-template #abpHeader>
-    <h3>{{ (selectedBook.id ? '::Edit' : '::NewBook' ) | abpLocalization }}</h3>
+    <h3>{{ (selectedBook.id ? '::Edit' : '::NewBook') | abpLocalization }}</h3>
   </ng-template>
 
   <ng-template #abpBody>
